@@ -120,7 +120,7 @@ class GHbutton_Plugin implements Typecho_Plugin_Interface
 		$btn_width = $settings->btn_width;
 		
 		//判断语言版本
-		$html = ($settings->btn_lang=='cn')?$url.'/GHbutton/github-btn-cn.html':$url.'/GHbutton/github-btn.html';
+		$html = ($settings->btn_lang=='cn')?$url.'/GHbutton/source/github-btn-cn.html':$url.'/GHbutton/source/github-btn.html';
 
 		//匹配输出参数
 		if (!empty($param)) {
@@ -137,7 +137,7 @@ class GHbutton_Plugin implements Typecho_Plugin_Interface
 				$btn_size = '&amp;size=large';
 			}
 			if (preg_match("/lang=[\"']cn[\"']/i",$param)) {
-				$html= $url.'/GHbutton/github-btn-cn.html';
+				$html= $url.'/GHbutton/source/github-btn-cn.html';
 			}
 			if (preg_match("/width=[\"']([\w-]*)[\"']/i",$param,$out)) {
 				$btn_width = trim($out[1])==''?$btn_width:str_replace('px','',trim($out[1]));
