@@ -31,7 +31,7 @@ class GHbutton_Plugin implements Typecho_Plugin_Interface
 	 * @return void
 	 * @throws Typecho_Plugin_Exception
 	 */
-	public static function deactivate(){}
+	public static function deactivate() {}
 
 	/**
 	 * 获取插件配置面板
@@ -42,7 +42,8 @@ class GHbutton_Plugin implements Typecho_Plugin_Interface
 	 */
 	public static function config(Typecho_Widget_Helper_Form $form)
 	{
-		echo "<div style='color:#999;font-size:0.92857em;font-weight:bold;'><p>编辑文章或页面写入如<span style='color:#467B96;'>&lt;gb&gt;</span><span style='color:#E47E00;'>用户名<span style='color:#467B96;'>/</span>项目名</span><span style='color:#467B96;'>&lt;/gb&gt;</span>发布即可. 支持标签参数, 详见各选项说明.<br/>示例: <span style='color:#467B96;'>&lt;gb user=\"<span style='color:#E47E00;'>typecho-fans</span>\"  type=\"<span style='color:#E47E00;'>star</span>\" count=\"<span style='color:#E47E00;'>1</span>\" size=\"<span style='color:#E47E00;'>1</span>\" width=\"<span style='color:#E47E00;'>200</span>\"&gt;</span><span style='color:#E47E00;'>plugins</span><span style='color:#467B96;'>&lt;/gb&gt;</span></p></div>";
+		echo '<div style="color:#999;font-size:0.92857em;font-weight:bold;"><p>
+		'._t('编辑文章或页面写入如%s用户名%s项目名%s发布即可. 支持标签参数, 详见各选项说明.<br/>示例: %s','<span style="color:#467B96;">&lt;gb&gt;</span><span style="color:#E47E00;">','<span style="color:#467B96;">/</span>','</span><span style="color:#467B96;">&lt;/gb&gt;</span>','<span style="color:#467B96;">&lt;gb user="<span style="color:#E47E00;">typecho-fans</span>" type="<span style="color:#E47E00;">star</span>" count="<span style="color:#E47E00;">1</span>" size="<span style="color:#E47E00;">1</span>" width="<span style="color:#E47E00;">200</span>"&gt;</span><span style="color:#E47E00;">plugins</span><span style="color:#467B96;">&lt;/gb&gt;</span></p></div>');
 		$btn_user = new Typecho_Widget_Helper_Form_Element_Text('btn_user',
 			NULL,'',_t('GitHub用户名'),_t('默认调用的username, 可在标签中用参数user="*"覆盖'));
 		$btn_user->input->setAttribute('class','w-20');
@@ -67,7 +68,7 @@ class GHbutton_Plugin implements Typecho_Plugin_Interface
 		$btn_width = new Typecho_Widget_Helper_Form_Element_Text('btn_width',
 	 		NULL,'170',_t('iframe框架宽度'),_t('默认iframe调用宽度, 单位px(不用写), 可在标签中用参数width="*"覆盖'));
 		$btn_width->input->setAttribute('class','w-10');
-		$form->addInput($btn_width->addRule('isInteger','请输入整数数字'));
+		$form->addInput($btn_width->addRule('isInteger',_t('请输入整数数字')));
 	}
 
 	/**
@@ -77,7 +78,7 @@ class GHbutton_Plugin implements Typecho_Plugin_Interface
 	 * @param Typecho_Widget_Helper_Form $form
 	 * @return void
 	 */
-	public static function personalConfig(Typecho_Widget_Helper_Form $form){}
+	public static function personalConfig(Typecho_Widget_Helper_Form $form) {}
 
 	/**
 	 * 输出标签替换
@@ -88,11 +89,11 @@ class GHbutton_Plugin implements Typecho_Plugin_Interface
 	 */
 	public static function btn_parse($content,$widget,$lastResult)
 	{
-		$content = empty($lastResult)?$content:$lastResult;
+		$content = empty($lastResult) ? $content : $lastResult;
 
 		//替换gb标签
 		if ($widget instanceof Widget_Archive) {
-			$content = preg_replace_callback('/<(gb)([^>]*)>(.*?)<\/\\1>/si',array('GHbutton_Plugin',"parseCallback"),$content);
+			$content = preg_replace_callback('/<(gb)([^>]*)>(.*?)<\/\\1>/si',array('GHbutton_Plugin','parseCallback'),$content);
 		}
 
 		return $content;
@@ -115,32 +116,32 @@ class GHbutton_Plugin implements Typecho_Plugin_Interface
 		//获取设置参数
 		$btn_user = $settings->btn_user;
 		$btn_type = $settings->btn_type;
-		$btn_count = ($settings->btn_count)?'&amp;count=true':'';
-		$btn_size = ($settings->btn_size)?'&amp;size=large':'';
+		$btn_count = ($settings->btn_count) ? '&amp;count=true' : '';
+		$btn_size = ($settings->btn_size) ? '&amp;size=large' : '';
 		$btn_width = $settings->btn_width;
 		
 		//判断语言版本
-		$html = ($settings->btn_lang=='cn')?$url.'/GHbutton/source/github-btn-cn.html':$url.'/GHbutton/source/github-btn.html';
+		$html = ($settings->btn_lang == 'cn') ? $url.'/GHbutton/source/github-btn-cn.html' : $url.'/GHbutton/source/github-btn.html';
 
 		//匹配输出参数
 		if (!empty($param)) {
-			if (preg_match("/user=[\"']([\w-]*)[\"']/i",$param,$out)) {
-				$btn_user = trim($out[1])==''?$btn_user:trim($out[1]);
+			if (preg_match('/user=["\']([\w-]*)["\']/i',$param,$out)) {
+				$btn_user = trim($out[1]) == '' ? $btn_user : trim($out[1]);
 			}
-			if (preg_match("/type=[\"'](watch|star|fork|follow|download)[\"']/i",$param,$out)) {
-				$btn_type = trim($out[1])==''?$btn_type:trim($out[1]);
+			if (preg_match('/type=["\'](watch|star|fork|follow|download)["\']/i',$param,$out)) {
+				$btn_type = trim($out[1]) == '' ? $btn_type : trim($out[1]);
 			}
-			if (preg_match("/count=[\"']1[\"']/i",$param)) {
+			if (preg_match('/count=["\']1["\']/i',$param)) {
 				$btn_count = '&amp;count=true';
 			}
-			if (preg_match("/size=[\"']1[\"']/i",$param)) {
+			if (preg_match('/size=["\']1["\']/i',$param)) {
 				$btn_size = '&amp;size=large';
 			}
-			if (preg_match("/lang=[\"']cn[\"']/i",$param)) {
+			if (preg_match('/lang=["\']cn["\']/i',$param)) {
 				$html= $url.'/GHbutton/source/github-btn-cn.html';
 			}
-			if (preg_match("/width=[\"']([\w-]*)[\"']/i",$param,$out)) {
-				$btn_width = trim($out[1])==''?$btn_width:str_replace('px','',trim($out[1]));
+			if (preg_match('/width=["\']([\w-]*)["\']/i',$param,$out)) {
+				$btn_width = trim($out[1]) == '' ? $btn_width:str_replace('px','',trim($out[1]));
 			}
 		}
 
