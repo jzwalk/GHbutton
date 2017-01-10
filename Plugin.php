@@ -152,7 +152,7 @@ class GHbutton_Plugin implements Typecho_Plugin_Interface
 			}
 		}
 
-		$replace = '<iframe src="'.$options->pluginUrl.$html.'?user='.$btn_user.'&amp;repo='.$btn_repo.'&amp;type='.$btn_type.$btn_count.$btn_size.'" width="'.$btn_width.'px" height="'.$btn_height.'px" frameborder="0" scrolling="0"></iframe>';
+		$replace = '<iframe src="'.$options->pluginUrl.$html.'?user='.$btn_user.'&amp;repo='.$btn_repo.'&amp;type='.($btn_type=='watch' ? $btn_type.'&amp;v=2' : $btn_type).$btn_count.$btn_size.'" width="'.$btn_width.'px" height="'.$btn_height.'px" frameborder="0" scrolling="0"></iframe>';
 
 		return $replace;
 	}
